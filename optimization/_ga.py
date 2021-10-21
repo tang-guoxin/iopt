@@ -122,12 +122,12 @@ class GeneticAlgorithm:
         self.minf_ = np.inf
         self.iter_ = None
         
-    def fit(self, step=1, curve=False):
+    def fit(self, display=False, curve=False):
         hisf, slow_time = list(), 0
         for ite in range(self.max_iter):
             fval = self.func(self.x)
             # 选择
-            idx = roulette(1, fval, 0.5)
+            idx = roulette(fval, self.percentage)
             evx = self.x[idx, :]
             evx2bin = mat2bin(evx, self.int_length, self.float_length)
             # 交叉
@@ -136,6 +136,7 @@ class GeneticAlgorithm:
             varx = variation(newx, self.percentage)
             # 更新
             self.x = bin2mat(varx)
+            self.x = self.condition(self.x, self.xlim)
             fmin = np.min(fval)
             idxf = np.argmin(fval)
             if fmin < self.minf_:
@@ -144,7 +145,7 @@ class GeneticAlgorithm:
             hisf.append(fmin)
             self.iter_ = ite
             if self.verbose:
-                if np.mod(ite, step) == 0:
+                if display:
                     print('第{}次迭代, 当前最优个体适应度值:{}'.format(ite, fmin))
             if self.slow_learn:
                 continue
@@ -164,6 +165,15 @@ class GeneticAlgorithm:
         plt.ylabel('function value')
         plt.show()
         return None
+    
+    def condition(self, x, limit):
+        c = np.zeros_like(x)
+        for d in range(self.dims):
+            tmp = x[:, d]
+            tmp[tmp < limit[0][d]] = limit[0][d]
+            tmp[tmp > limit[1][d]] = limit[1][d]
+            c[:, d] = tmp
+        return c
 
 
 

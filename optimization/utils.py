@@ -52,7 +52,7 @@ def bin2dec(num):
 # 轮盘赌算法
 # 经过测试, 前面的seed设置之后会从某一个点迭代生成一组随机数, 
 # 不会一直生成同一个数, 但是每次运行会生成相同的序列, 是需要的结果
-def roulette(num, fval, perc):
+def roulette(fval, perc):
     res = list()
     max_val = np.max(fval)
     fval = fval - max_val
