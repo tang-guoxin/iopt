@@ -28,7 +28,7 @@ example:
 """
 
 
-class PSO:
+class ParticleSwarmOptimization:
     def __init__(self,
                  func,
                  dims,
@@ -53,7 +53,8 @@ class PSO:
         self.c2 = c2
         self.max_iter = max_iter
         self.tol = tol
-        self.best = None
+        self.best_ = None
+        self.minf_ = np.inf
         self.x = np.random.uniform(xlim[0], xlim[1], (pap, dims))
         self.v = np.random.uniform(vlim[0], vlim[1], (pap, dims))
         self.his = []
@@ -80,7 +81,7 @@ class PSO:
 
     def refresh_follow(self, y, follow):
         for i in range(self.pap):
-            if self.func(self.x[i, :]) < y[i]:
+            if self.func(self.x[i, :].reshape(1, -1)) < y[i]:
                 follow[i, :] = self.x[i, :]
         return follow
 
@@ -89,7 +90,7 @@ class PSO:
         plt.show()
         return True
 
-    def fit(self, display=False):
+    def fit(self, display=False, curve=False):
         times = 0
         follow = self.x
         y = self.func(follow)
@@ -113,7 +114,10 @@ class PSO:
                 times = 0
             if times > self.slow:
                 break
-        self.best = leader
+        self.best_ = leader
+        self.minf_ = np.min(y)
+        if curve:
+            self.curve()
         return np.min(y)
 
 
@@ -127,7 +131,7 @@ def fx(x):
 
 
 if __name__ == '__main__':
-    ser = PSO(fx, 2, xlim=([-5, -5], [5, 5]), vlim=([-2, -2], [2, 2]))
+    ser = ParticleSwarmOptimization(fx, 2, xlim=([-5, -5], [5, 5]), vlim=([-2, -2], [2, 2]))
 
     fmin = ser.fit(display=True)
 

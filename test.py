@@ -24,7 +24,7 @@ ga = GeneticAlgorithm(func,
                       random_state=1
                       )
 
-ga.fit(display=False, curve=False)
+ga.fit(display=False, curve=True)
 
 
 
@@ -35,7 +35,7 @@ pso = ParticleSwarmOptimization(func,
                                 )
 
 
-pso.fit(display=False, curve=False)
+pso.fit(display=False, curve=True)
 
 
 print(ga.minf_)
