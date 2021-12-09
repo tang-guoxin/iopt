@@ -13,7 +13,7 @@ dims = 2
 
 ga = GeneticAlgorithm(func,
                       dims,
-                      float_length=32,
+                      float_length=64,
                       xlim=((-5, -5), (5, 5)),
                       population=10,
                       max_iter=100,
